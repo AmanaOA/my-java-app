@@ -1,7 +1,6 @@
 
 name: Trigger on pomxml
 
-# Controls when the workflow will run
 on:
   push:
     paths:
@@ -9,22 +8,28 @@ on:
       -'/Users/amanaarmantrading/OneDrive - University of Bedfordshire/University of Bedfordshire/MyApp/target/site'
       -'pom.xml'
 
-  # Allows you to run this workflow manually from the Actions tab
+  
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
-
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+        
+      - name: Read Target URL from pom.xml
+        id: read-target-url
+        run: echo "::set-output name=url::$(grep -oPm1 "(?<=<userText>)[^<]+" pom.xml)"
+      
       - uses: actions/checkout@v3
       - name: Run Dastardly Action Step
         continue-on-error: true                        
         uses: PortSwigger/dastardly-github-action@main
         with:
-          target-url: 'pom.xml'
-    
+          target-url: ${{ steps.read-target-url.outputs.url }}    
+
       - name: Publish Test Report
         if: always()                                    
         uses: mikepenz/action-junit-report@v3
