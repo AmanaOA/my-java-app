@@ -6,7 +6,7 @@ on:
     paths:
       -'MyApp.java'
       -'/Users/amanaarmantrading/OneDrive - University of Bedfordshire/University of Bedfordshire/MyApp/target/site'
-      -'pom.xml'
+      -'file.xml'
 
   
   workflow_dispatch:
@@ -19,9 +19,9 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
         
-      - name: Read Target URL from pom.xml
+      - name: Read Target URL from file.xml
         id: read-target-url
-        run: echo "::set-output name=url::$(grep -oPm1 "(?<=<userText>)[^<]+" pom.xml)"
+        run: echo "::set-output name=GITHUB_OUTPUT::$(grep -oPm1 "(?<=<userText>)[^<]+" file.xml)"
       
       - uses: actions/checkout@v3
       - name: Run Dastardly Action Step
