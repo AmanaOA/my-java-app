@@ -4,9 +4,7 @@ name: Trigger on pomxml
 on:
   push:
     paths:
-      -'MyApp.java'
-      -'/Users/amanaarmantrading/OneDrive - University of Bedfordshire/University of Bedfordshire/MyApp/target/site'
-      -'file.xml'
+      -'/Users/amanaarmantrading/OneDrive - University of Bedfordshire/University of Bedfordshire/MyApp/target/site/file.xml'
 
   
   workflow_dispatch:
@@ -21,7 +19,7 @@ jobs:
         
       - name: Read Target URL from file.xml
         id: read-target-url
-        run: echo "::set-output name=GITHUB_OUTPUT::$(grep -oPm1 "(?<=<userText>)[^<]+" file.xml)"
+        run: echo "name=GITHUB_OUTPUT::$(grep -oPm1 "(?<=<userText>)[^<]+" file.xml)"
       
       - uses: actions/checkout@v3
       - name: Run Dastardly Action Step
