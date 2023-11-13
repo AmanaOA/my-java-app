@@ -5,7 +5,7 @@ on:
   push:
     paths:
       -'MyApp.java'
-      -'/Users/amanaarmantrading/OneDrive - University of Bedfordshire/University of Bedfordshire/MyApp/'
+      -'/Users/amanaarmantrading/OneDrive - University of Bedfordshire/University of Bedfordshire/MyApp'
       -'file.xml'
 
   
