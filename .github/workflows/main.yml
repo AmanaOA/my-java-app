@@ -3,7 +3,7 @@ name: Trigger Workflow on File Change
 on:
   push:
     paths:
-      - 'file.xml'
+      - '/Users/amanaarmantrading/OneDrive - University of Bedfordshire/University of Bedfordshire/MyApp/file.xml'
 
 jobs:
   your_job_name:
