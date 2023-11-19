@@ -1,32 +1,40 @@
-name: Trigger Workflow on File Change
-
 on:
   push:
-    paths:
-      - 'file.xml'
+    branches:
+      - main
 
 jobs:
-  your_job_name:
+  scan-website:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-  build:
-    runs-on: ubuntu-latest
+      - name: Retrieve URL from GitHub
+        id: get-url
+        run: |
+          URL=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+                    https://api.github.com/repos/YourGitHubUsername/YourGitHubRepository/contents/url.txt \
+                    | jq -r '.content' \
+                    | base64 --decode)
+          echo "URL from GitHub: $URL"
+        shell: bash
 
-
-    steps:
       - name: Run Dastardly Action Step
-        continue-on-error: true                        
+        continue-on-error: true                        # This allows subsequent steps to run even if this step fails
         uses: PortSwigger/dastardly-github-action@main
         with:
-          target-url: 'file.xml'
+         target-url: ${{ steps.get-url.outputs.URL }}
+        env:
+          YOUR_API_KEY: ${{ secrets.YOUR_API_KEY }}
     
       - name: Publish Test Report
-        if: always()
+        if: always()                                    # Forces this step to always run
         uses: mikepenz/action-junit-report@v3
         with:
           report_paths: '**/dastardly-report.xml'       # You need to update this path if you pass in a different output filename to the Dastardly action
           require_tests: true
-          
+
+      
+         
